@@ -2,20 +2,23 @@
 
 namespace Tests\Feature;
 
+use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ExampleTest extends TestCase
+class TaskTest extends TestCase
 {
+    use RefreshDatabase;
     /**
-     * A basic test example.
-     *
-     * @return void
+     * @test
      */
-    public function test_example()
+    public function 一覧を取得()
     {
-        $response = $this->get('/');
+        $tasks = Task::factory()->count(10)->create();
+        $response = $this->getJson('api/task');
 
-        $response->assertStatus(200);
+        $response
+            ->assertOk()
+            ->assertJsonCount($tasks->count());
     }
 }
