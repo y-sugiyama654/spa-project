@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -24,7 +25,7 @@ class TaskController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
         $task = Task::create($request->all());
 
@@ -39,7 +40,7 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return Response
      */
-    public function show(Task $task)
+    public function show(TaskRequest $task)
     {
         //
     }
@@ -51,7 +52,7 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return Response
      */
-    public function update(Request $request, Task $task)
+    public function update(TaskRequest $request, Task $task)
     {
         $task->title = $request->title;
 
