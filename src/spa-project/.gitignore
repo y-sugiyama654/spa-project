@@ -16,3 +16,5 @@ yarn-error.log
 .idea/php.xml
 .env.testing
 ../.idea/php.xml
+../../docker/db/data/
+../../docker/db/
