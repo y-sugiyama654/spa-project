@@ -33,7 +33,7 @@ services:
       - 3306:3306
 
   node:
-    image: node:12.13-alpine
+    image: node:12.14-alpine
     tty: true
     volumes:
       - ./src:/var/www
