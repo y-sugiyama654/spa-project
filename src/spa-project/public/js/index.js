@@ -2264,7 +2264,7 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.updateDoneTask = exports.getTasks = void 0;
+exports.createTask = exports.updateDoneTask = exports.getTasks = void 0;
 
 var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
 
@@ -2315,6 +2315,30 @@ var updateDoneTask = function updateDoneTask(_a) {
 };
 
 exports.updateDoneTask = updateDoneTask;
+
+var createTask = function createTask(title) {
+  return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          return [4
+          /*yield*/
+          , axios_1["default"].post("/api/task", {
+            title: title
+          })];
+
+        case 1:
+          data = _a.sent().data;
+          return [2
+          /*return*/
+          , data];
+      }
+    });
+  });
+};
+
+exports.createTask = createTask;
 
 /***/ }),
 
@@ -2437,28 +2461,74 @@ exports["default"] = LoginPage;
 "use strict";
 
 
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
 };
 
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var TaskQuery_1 = __webpack_require__(/*! ../../../queries/TaskQuery */ "./resources/ts/queries/TaskQuery.ts");
 
 var TaskInput = function TaskInput() {
+  var _a = (0, react_1.useState)(''),
+      title = _a[0],
+      setTitle = _a[1];
+
+  var createTask = (0, TaskQuery_1.useCreateTask)();
+
+  var handleSubmit = function handleSubmit(e) {
+    e.preventDefault();
+    createTask.mutate(title);
+    setTitle('');
+  };
+
   return react_1["default"].createElement("form", {
-    className: "input-form"
+    className: "input-form",
+    onSubmit: handleSubmit
   }, react_1["default"].createElement("div", {
     className: "inner"
   }, react_1["default"].createElement("input", {
     type: "text",
     className: "input",
     placeholder: "TODO\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
-    defaultValue: ""
+    value: title,
+    onChange: function onChange(e) {
+      return setTitle(e.target.value);
+    }
   }), react_1["default"].createElement("button", {
     className: "btn is-primary"
   }, "\u8FFD\u52A0")));
@@ -2660,7 +2730,7 @@ var __importStar = this && this.__importStar || function (mod) {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.useUpdateDoneTask = exports.useTasks = void 0;
+exports.useCreateTask = exports.useUpdateDoneTask = exports.useTasks = void 0;
 
 var react_query_1 = __webpack_require__(/*! react-query */ "./node_modules/react-query/es/index.js");
 
@@ -2689,6 +2759,31 @@ var useUpdateDoneTask = function useUpdateDoneTask() {
 };
 
 exports.useUpdateDoneTask = useUpdateDoneTask;
+
+var useCreateTask = function useCreateTask() {
+  var queryClient = (0, react_query_1.useQueryClient)();
+  return (0, react_query_1.useMutation)(api.createTask, {
+    onSuccess: function onSuccess() {
+      queryClient.invalidateQueries('tasks');
+      react_toastify_1.toast.success('登録に成功しました。');
+    },
+    onError: function onError(error) {
+      var _a, _b;
+
+      if ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data.errors) {
+        Object.values((_b = error.response) === null || _b === void 0 ? void 0 : _b.data.errors).map(function (messages) {
+          messages.map(function (message) {
+            react_toastify_1.toast.error(message);
+          });
+        });
+      } else {
+        react_toastify_1.toast.error("登録に失敗しました。");
+      }
+    }
+  });
+};
+
+exports.useCreateTask = useCreateTask;
 
 /***/ }),
 
