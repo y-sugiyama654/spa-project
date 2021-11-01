@@ -35,21 +35,10 @@ class TaskController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return Response
-     */
-    public function show(TaskRequest $task)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  \App\Models\Task  $task
+     * @param Task $task
      * @return Response
      */
     public function update(TaskRequest $request, Task $task)
@@ -64,12 +53,28 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Task  $task
+     * @param Task $task
      * @return Response
      */
     public function destroy(Task $task)
     {
         return $task->delete()
+            ? response()->json($task)
+            : response()->json([], 500);
+    }
+
+    /**
+     * is_doneの更新
+     *
+     * @param Task $task
+     * @param Request $request
+     * @return void
+     */
+    public function updateDone(Task $task, Request $request)
+    {
+        $task->is_done = $request->is_done;
+
+        return $task->update()
             ? response()->json($task)
             : response()->json([], 500);
     }
