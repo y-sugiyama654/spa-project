@@ -2264,7 +2264,7 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.createTask = exports.updateDoneTask = exports.getTasks = void 0;
+exports.deleteTask = exports.updateTask = exports.createTask = exports.updateDoneTask = exports.getTasks = void 0;
 
 var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
 
@@ -2339,6 +2339,52 @@ var createTask = function createTask(title) {
 };
 
 exports.createTask = createTask;
+
+var updateTask = function updateTask(_a) {
+  var id = _a.id,
+      task = _a.task;
+  return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_b) {
+      switch (_b.label) {
+        case 0:
+          return [4
+          /*yield*/
+          , axios_1["default"].put("/api/task/" + id, task)];
+
+        case 1:
+          data = _b.sent().data;
+          return [2
+          /*return*/
+          , data];
+      }
+    });
+  });
+};
+
+exports.updateTask = updateTask;
+
+var deleteTask = function deleteTask(id) {
+  return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          return [4
+          /*yield*/
+          , axios_1["default"]["delete"]("/api/task/" + id)];
+
+        case 1:
+          data = _a.sent().data;
+          return [2
+          /*return*/
+          , data];
+      }
+    });
+  });
+};
+
+exports.deleteTask = deleteTask;
 
 /***/ }),
 
@@ -2547,23 +2593,134 @@ exports["default"] = TaskInput;
 "use strict";
 
 
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
   };
+
+  return __assign.apply(this, arguments);
+};
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
 };
 
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
 var TaskQuery_1 = __webpack_require__(/*! ../../../queries/TaskQuery */ "./resources/ts/queries/TaskQuery.ts");
+
+var react_toastify_1 = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
 
 var TaskItem = function TaskItem(_a) {
   var task = _a.task;
   var updateDoneTask = (0, TaskQuery_1.useUpdateDoneTask)();
+  var updateTask = (0, TaskQuery_1.useUpdateTask)();
+  var deleteTask = (0, TaskQuery_1.useDeleteTask)();
+
+  var _b = (0, react_1.useState)(undefined),
+      editTitle = _b[0],
+      setEditTitle = _b[1];
+
+  var handleInputChange = function handleInputChange(e) {
+    setEditTitle(e.target.value);
+  };
+
+  var handleUpdate = function handleUpdate(e) {
+    e.preventDefault();
+
+    if (!editTitle) {
+      react_toastify_1.toast.error("タイトルを入力してください。");
+      return;
+    }
+
+    var newTask = __assign({}, task);
+
+    newTask.title = editTitle;
+    updateTask.mutate({
+      id: task.id,
+      task: newTask
+    });
+    setEditTitle(undefined);
+  };
+
+  var handleToggleEdit = function handleToggleEdit() {
+    setEditTitle(task.title);
+  };
+
+  var handleOnKey = function handleOnKey(e) {
+    if (['Escape', 'Tab'].includes(e.key)) {
+      setEditTitle(undefined);
+    }
+  };
+
+  var itemInput = function itemInput() {
+    return react_1["default"].createElement(react_1["default"].Fragment, null, react_1["default"].createElement("form", {
+      onSubmit: handleUpdate
+    }, react_1["default"].createElement("input", {
+      type: "text",
+      className: "input",
+      defaultValue: editTitle,
+      onChange: handleInputChange,
+      onKeyDown: handleOnKey
+    }), react_1["default"].createElement("button", {
+      className: "btn",
+      onClick: handleUpdate
+    }, "\u66F4\u65B0")));
+  };
+
+  var itemText = function itemText() {
+    return react_1["default"].createElement(react_1["default"].Fragment, null, react_1["default"].createElement("div", {
+      onClick: handleToggleEdit
+    }, react_1["default"].createElement("span", null, task.title)), react_1["default"].createElement("button", {
+      className: "btn is-delete",
+      onClick: function onClick() {
+        return deleteTask.mutate(task.id);
+      }
+    }, "\u524A\u9664"));
+  };
+
   return react_1["default"].createElement("li", {
     key: task.id,
     className: task.is_done ? 'done' : ''
@@ -2575,9 +2732,7 @@ var TaskItem = function TaskItem(_a) {
     onClick: function onClick() {
       return updateDoneTask.mutate(task);
     }
-  })), react_1["default"].createElement("div", null, react_1["default"].createElement("span", null, task.title)), react_1["default"].createElement("button", {
-    className: "btn is-delete"
-  }, "\u524A\u9664"));
+  })), editTitle === undefined ? itemText() : itemInput());
 };
 
 exports["default"] = TaskItem;
@@ -2730,7 +2885,7 @@ var __importStar = this && this.__importStar || function (mod) {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.useCreateTask = exports.useUpdateDoneTask = exports.useTasks = void 0;
+exports.useDeleteTask = exports.useUpdateTask = exports.useCreateTask = exports.useUpdateDoneTask = exports.useTasks = void 0;
 
 var react_query_1 = __webpack_require__(/*! react-query */ "./node_modules/react-query/es/index.js");
 
@@ -2784,6 +2939,46 @@ var useCreateTask = function useCreateTask() {
 };
 
 exports.useCreateTask = useCreateTask;
+
+var useUpdateTask = function useUpdateTask() {
+  var queryClient = (0, react_query_1.useQueryClient)();
+  return (0, react_query_1.useMutation)(api.updateTask, {
+    onSuccess: function onSuccess() {
+      queryClient.invalidateQueries('tasks');
+      react_toastify_1.toast.success('更新に成功しました。');
+    },
+    onError: function onError(error) {
+      var _a, _b;
+
+      if ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data.errors) {
+        Object.values((_b = error.response) === null || _b === void 0 ? void 0 : _b.data.errors).map(function (messages) {
+          messages.map(function (message) {
+            react_toastify_1.toast.error(message);
+          });
+        });
+      } else {
+        react_toastify_1.toast.error("更新に失敗しました。");
+      }
+    }
+  });
+};
+
+exports.useUpdateTask = useUpdateTask;
+
+var useDeleteTask = function useDeleteTask() {
+  var queryClient = (0, react_query_1.useQueryClient)();
+  return (0, react_query_1.useMutation)(api.deleteTask, {
+    onSuccess: function onSuccess() {
+      queryClient.invalidateQueries('tasks');
+      react_toastify_1.toast.success('削除に成功しました。');
+    },
+    onError: function onError() {
+      react_toastify_1.toast.error("削除に失敗しました。");
+    }
+  });
+};
+
+exports.useDeleteTask = useDeleteTask;
 
 /***/ }),
 
