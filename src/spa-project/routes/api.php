@@ -14,9 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('task', 'TaskController');
-Route::patch('task/update-done/{task}', 'TaskController@updateDone');
+Route::post('login', 'LoginController@login');
+Route::post('logout', 'LoginController@logout');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::apiResource('task', 'TaskController');
+    Route::patch('task/update-done/{task}', 'TaskController@updateDone');
+    Route::get('user', function (Request $request) {
+        return $request->user();
+    });
+
 });
+
+
+
+
