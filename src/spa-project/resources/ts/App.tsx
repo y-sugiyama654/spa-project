@@ -3,6 +3,7 @@ import Router from "./router"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AuthProvider } from "./hooks/AuthContext"
 
 const App: React.VFC = () => {
 
@@ -18,10 +19,12 @@ const App: React.VFC = () => {
     })
 
     return (
-        <QueryClientProvider client={queryClient} >
-            <Router />
-            <ToastContainer />
-        </QueryClientProvider>
+        <AuthProvider>
+            <QueryClientProvider client={queryClient} >
+                <Router />
+                <ToastContainer />
+            </QueryClientProvider>
+        </AuthProvider>
     )
 }
 

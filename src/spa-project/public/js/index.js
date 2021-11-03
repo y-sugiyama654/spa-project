@@ -2083,6 +2083,8 @@ var react_toastify_1 = __webpack_require__(/*! react-toastify */ "./node_modules
 
 __webpack_require__(/*! react-toastify/dist/ReactToastify.css */ "./node_modules/react-toastify/dist/ReactToastify.css");
 
+var AuthContext_1 = __webpack_require__(/*! ./hooks/AuthContext */ "./resources/ts/hooks/AuthContext.tsx");
+
 var App = function App() {
   var queryClient = new react_query_1.QueryClient({
     defaultOptions: {
@@ -2094,12 +2096,250 @@ var App = function App() {
       }
     }
   });
-  return react_1["default"].createElement(react_query_1.QueryClientProvider, {
+  return react_1["default"].createElement(AuthContext_1.AuthProvider, null, react_1["default"].createElement(react_query_1.QueryClientProvider, {
     client: queryClient
-  }, react_1["default"].createElement(router_1["default"], null), react_1["default"].createElement(react_toastify_1.ToastContainer, null));
+  }, react_1["default"].createElement(router_1["default"], null), react_1["default"].createElement(react_toastify_1.ToastContainer, null)));
 };
 
 exports["default"] = App;
+
+/***/ }),
+
+/***/ "./resources/ts/api/AuthAPI.ts":
+/*!*************************************!*\
+  !*** ./resources/ts/api/AuthAPI.ts ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = this && this.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.logout = exports.login = exports.getUser = void 0;
+
+var axios_1 = __importDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
+
+var getUser = function getUser() {
+  return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          return [4
+          /*yield*/
+          , axios_1["default"].get('api/user')];
+
+        case 1:
+          data = _a.sent().data;
+          return [2
+          /*return*/
+          , data];
+      }
+    });
+  });
+};
+
+exports.getUser = getUser;
+
+var login = function login(_a) {
+  var email = _a.email,
+      password = _a.password;
+  return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_b) {
+      switch (_b.label) {
+        case 0:
+          return [4
+          /*yield*/
+          , axios_1["default"].post("/api/login", {
+            email: email,
+            password: password
+          })];
+
+        case 1:
+          data = _b.sent().data;
+          return [2
+          /*return*/
+          , data];
+      }
+    });
+  });
+};
+
+exports.login = login;
+
+var logout = function logout() {
+  return __awaiter(void 0, void 0, void 0, function () {
+    var data;
+    return __generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          return [4
+          /*yield*/
+          , axios_1["default"].post("/api/logout")];
+
+        case 1:
+          data = _a.sent().data;
+          return [2
+          /*return*/
+          , data];
+      }
+    });
+  });
+};
+
+exports.logout = logout;
 
 /***/ }),
 
@@ -2388,6 +2628,86 @@ exports.deleteTask = deleteTask;
 
 /***/ }),
 
+/***/ "./resources/ts/hooks/AuthContext.tsx":
+/*!********************************************!*\
+  !*** ./resources/ts/hooks/AuthContext.tsx ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useAuth = exports.AuthProvider = void 0;
+
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var AuthContext = (0, react_1.createContext)({
+  isAuth: false,
+  setIsAuth: function setIsAuth() {}
+});
+
+var AuthProvider = function AuthProvider(_a) {
+  var children = _a.children;
+
+  var _b = (0, react_1.useState)(false),
+      isAuth = _b[0],
+      setIsAuth = _b[1];
+
+  return react_1["default"].createElement(AuthContext.Provider, {
+    value: {
+      isAuth: isAuth,
+      setIsAuth: setIsAuth
+    }
+  }, children);
+};
+
+exports.AuthProvider = AuthProvider;
+
+var useAuth = function useAuth() {
+  return (0, react_1.useContext)(AuthContext);
+};
+
+exports.useAuth = useAuth;
+
+/***/ }),
+
 /***/ "./resources/ts/index.tsx":
 /*!********************************!*\
   !*** ./resources/ts/index.tsx ***!
@@ -2414,6 +2734,37 @@ var react_dom_1 = __importDefault(__webpack_require__(/*! react-dom */ "./node_m
 var App_1 = __importDefault(__webpack_require__(/*! ./App */ "./resources/ts/App.tsx"));
 
 react_dom_1["default"].render(react_1["default"].createElement(App_1["default"], null), document.getElementById('app'));
+
+/***/ }),
+
+/***/ "./resources/ts/pages/error/index.tsx":
+/*!********************************************!*\
+  !*** ./resources/ts/pages/error/index.tsx ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var NotFoundPage = function NotFoundPage() {
+  return react_1["default"].createElement("div", {
+    className: "login-page"
+  }, react_1["default"].createElement("h1", null, "404 NotFound"), react_1["default"].createElement("p", null, "\u304A\u63A2\u3057\u306E\u30DA\u30FC\u30B8\u306F\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3067\u3057\u305F\u3002"));
+};
+
+exports["default"] = NotFoundPage;
 
 /***/ }),
 
@@ -2457,33 +2808,91 @@ exports["default"] = HelpPage;
 "use strict";
 
 
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
 };
 
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 
-var react_1 = __importDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+var react_1 = __importStar(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var AuthQuery_1 = __webpack_require__(/*! ../../queries/AuthQuery */ "./resources/ts/queries/AuthQuery.ts");
 
 var LoginPage = function LoginPage() {
+  var login = (0, AuthQuery_1.useLogin)();
+
+  var _a = (0, react_1.useState)('admin@gmail.com'),
+      email = _a[0],
+      setEmail = _a[1];
+
+  var _b = (0, react_1.useState)('password'),
+      password = _b[0],
+      setPassword = _b[1];
+
+  var handleLogin = function handleLogin(e) {
+    e.preventDefault();
+    login.mutate({
+      email: email,
+      password: password
+    });
+  };
+
   return react_1["default"].createElement("div", {
     className: "login-page"
   }, react_1["default"].createElement("div", {
     className: "login-panel"
-  }, react_1["default"].createElement("form", null, react_1["default"].createElement("div", {
+  }, react_1["default"].createElement("form", {
+    onSubmit: handleLogin
+  }, react_1["default"].createElement("div", {
     className: "input-group"
   }, react_1["default"].createElement("label", null, "\u30E1\u30FC\u30EB\u30A2\u30C9\u30EC\u30B9"), react_1["default"].createElement("input", {
     type: "email",
-    className: "input"
+    className: "input",
+    value: email,
+    onChange: function onChange(e) {
+      return setEmail(e.target.value);
+    }
   })), react_1["default"].createElement("div", {
     className: "input-group"
   }, react_1["default"].createElement("label", null, "\u30D1\u30B9\u30EF\u30FC\u30C9"), react_1["default"].createElement("input", {
     type: "password",
-    className: "input"
+    className: "input",
+    value: password,
+    onChange: function onChange(e) {
+      return setPassword(e.target.value);
+    }
   })), react_1["default"].createElement("button", {
     type: "submit",
     className: "btn"
@@ -2839,6 +3248,102 @@ exports["default"] = TaskPage;
 
 /***/ }),
 
+/***/ "./resources/ts/queries/AuthQuery.ts":
+/*!*******************************************!*\
+  !*** ./resources/ts/queries/AuthQuery.ts ***!
+  \*******************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  Object.defineProperty(o, k2, {
+    enumerable: true,
+    get: function get() {
+      return m[k];
+    }
+  });
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useLogout = exports.useLogin = exports.useUser = void 0;
+
+var react_query_1 = __webpack_require__(/*! react-query */ "./node_modules/react-query/es/index.js");
+
+var api = __importStar(__webpack_require__(/*! ../api/AuthAPI */ "./resources/ts/api/AuthAPI.ts"));
+
+var react_toastify_1 = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.js");
+
+var AuthContext_1 = __webpack_require__(/*! ../hooks/AuthContext */ "./resources/ts/hooks/AuthContext.tsx");
+
+var useUser = function useUser() {
+  return (0, react_query_1.useQuery)('user', api.getUser);
+};
+
+exports.useUser = useUser;
+
+var useLogin = function useLogin() {
+  var setIsAuth = (0, AuthContext_1.useAuth)().setIsAuth;
+  return (0, react_query_1.useMutation)(api.login, {
+    onSuccess: function onSuccess(user) {
+      if (user) {
+        setIsAuth(true);
+      }
+    },
+    onError: function onError() {
+      react_toastify_1.toast.error("ログインに失敗しました。");
+    }
+  });
+};
+
+exports.useLogin = useLogin;
+
+var useLogout = function useLogout() {
+  var setIsAuth = (0, AuthContext_1.useAuth)().setIsAuth;
+  return (0, react_query_1.useMutation)(api.logout, {
+    onSuccess: function onSuccess(user) {
+      if (user) {
+        setIsAuth(false);
+      }
+    },
+    onError: function onError() {
+      react_toastify_1.toast.error("ログアウトに失敗しました。");
+    }
+  });
+};
+
+exports.useLogout = useLogout;
+
+/***/ }),
+
 /***/ "./resources/ts/queries/TaskQuery.ts":
 /*!*******************************************!*\
   !*** ./resources/ts/queries/TaskQuery.ts ***!
@@ -2991,6 +3496,22 @@ exports.useDeleteTask = useDeleteTask;
 "use strict";
 
 
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
   Object.defineProperty(o, k2, {
@@ -3045,23 +3566,74 @@ var index_2 = __importDefault(__webpack_require__(/*! ./pages/login/index */ "./
 
 var index_3 = __importDefault(__webpack_require__(/*! ./pages/help/index */ "./resources/ts/pages/help/index.tsx"));
 
+var AuthQuery_1 = __webpack_require__(/*! ./queries/AuthQuery */ "./resources/ts/queries/AuthQuery.ts");
+
+var AuthContext_1 = __webpack_require__(/*! ./hooks/AuthContext */ "./resources/ts/hooks/AuthContext.tsx");
+
+var error_1 = __importDefault(__webpack_require__(/*! ./pages/error */ "./resources/ts/pages/error/index.tsx"));
+
 var Router = function Router() {
-  (0, react_1.useEffect)(function () {}, []);
-  return react_1["default"].createElement(react_router_dom_1.BrowserRouter, null, react_1["default"].createElement("header", {
+  var logout = (0, AuthQuery_1.useLogout)();
+
+  var _a = (0, AuthContext_1.useAuth)(),
+      isAuth = _a.isAuth,
+      setIsAuth = _a.setIsAuth;
+
+  var _b = (0, AuthQuery_1.useUser)(),
+      isLoading = _b.isLoading,
+      authUser = _b.data;
+
+  (0, react_1.useEffect)(function () {
+    if (authUser) {
+      setIsAuth(true);
+    }
+  }, [authUser]);
+
+  var GardRoute = function GardRoute(props) {
+    if (!isAuth) return react_1["default"].createElement(react_router_dom_1.Redirect, {
+      to: "/login"
+    });
+    return react_1["default"].createElement(react_router_dom_1.Route, __assign({}, props));
+  };
+
+  var LoginRoute = function LoginRoute(props) {
+    if (isAuth) return react_1["default"].createElement(react_router_dom_1.Redirect, {
+      to: "/"
+    });
+    return react_1["default"].createElement(react_router_dom_1.Route, __assign({}, props));
+  };
+
+  var navigation = react_1["default"].createElement("header", {
     className: "global-head"
   }, react_1["default"].createElement("ul", null, react_1["default"].createElement("li", null, react_1["default"].createElement(react_router_dom_1.Link, {
     to: "/"
   }, "\u30DB\u30FC\u30E0")), react_1["default"].createElement("li", null, react_1["default"].createElement(react_router_dom_1.Link, {
     to: "/help"
+  }, "\u30D8\u30EB\u30D7")), react_1["default"].createElement("li", {
+    onClick: function onClick() {
+      return logout.mutate();
+    }
+  }, react_1["default"].createElement("span", null, "\u30ED\u30B0\u30A2\u30A6\u30C8"))));
+  var loginNavigation = react_1["default"].createElement("header", {
+    className: "global-head"
+  }, react_1["default"].createElement("ul", null, react_1["default"].createElement("li", null, react_1["default"].createElement(react_router_dom_1.Link, {
+    to: "/help"
   }, "\u30D8\u30EB\u30D7")), react_1["default"].createElement("li", null, react_1["default"].createElement(react_router_dom_1.Link, {
     to: "/login"
-  }, "\u30ED\u30B0\u30A4\u30F3")), react_1["default"].createElement("li", null, react_1["default"].createElement("span", null, "\u30ED\u30B0\u30A2\u30A6\u30C8")))), react_1["default"].createElement(react_router_dom_1.Switch, null, react_1["default"].createElement(react_router_dom_1.Route, {
+  }, "\u30ED\u30B0\u30A4\u30F3"))));
+  if (isLoading) return react_1["default"].createElement("div", {
+    className: "loader"
+  });
+  return react_1["default"].createElement(react_router_dom_1.BrowserRouter, null, isAuth ? navigation : loginNavigation, react_1["default"].createElement(react_router_dom_1.Switch, null, react_1["default"].createElement(react_router_dom_1.Route, {
     path: "/help"
-  }, react_1["default"].createElement(index_3["default"], null)), react_1["default"].createElement(react_router_dom_1.Route, {
+  }, react_1["default"].createElement(index_3["default"], null)), react_1["default"].createElement(LoginRoute, {
     path: "/login"
-  }, react_1["default"].createElement(index_2["default"], null)), react_1["default"].createElement(react_router_dom_1.Route, {
+  }, react_1["default"].createElement(index_2["default"], null)), react_1["default"].createElement(GardRoute, {
+    exact: true,
     path: "/"
-  }, react_1["default"].createElement(index_1["default"], null))));
+  }, react_1["default"].createElement(index_1["default"], null)), react_1["default"].createElement(react_router_dom_1.Route, {
+    component: error_1["default"]
+  })));
 };
 
 exports["default"] = Router;
