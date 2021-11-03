@@ -29,8 +29,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::orderByDesc('id')->get();
-        //return Task::where('user_id', Auth::id())->orderByDesc('id')->get();
+        return Task::where('user_id', Auth::id())->orderByDesc('id')->get();
     }
 
     /**
