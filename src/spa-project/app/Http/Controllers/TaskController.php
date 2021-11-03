@@ -6,9 +6,22 @@ use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+    /**
+     * TaskController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('can:checkUser,task')->only([
+            'updateDone',
+            'update',
+            'destroy '
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +29,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::all();
+        return Task::orderByDesc('id')->get();
+        //return Task::where('user_id', Auth::id())->orderByDesc('id')->get();
     }
 
     /**
@@ -27,6 +41,10 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
+        $request->merge([
+            'user_id' => Auth::id()
+        ]);
+
         $task = Task::create($request->all());
 
         return $task
