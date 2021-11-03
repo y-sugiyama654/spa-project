@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use phpDocumentor\Reflection\Types\Void_;
 use Tests\TestCase;
 
@@ -12,12 +13,14 @@ class TaskTest extends TestCase
 {
     use RefreshDatabase;
 
+    private $user;
+
     public function setUp(): void
     {
         parent::setUp();
 
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
     }
 
     /**
@@ -25,7 +28,10 @@ class TaskTest extends TestCase
      */
     public function 一覧を取得できる()
     {
-        $tasks = Task::factory()->count(10)->create();
+        $tasks = Task::factory()->count(10)->create([
+            'user_id' => $this->user->id
+        ]);
+
         $response = $this->getJson('api/task');
 
         $response
@@ -89,9 +95,11 @@ class TaskTest extends TestCase
      */
     public function 更新することができる()
     {
-        $task = Task::factory()->create();
-        $task->title = '書き換え';
+        $task = Task::factory()->create([
+            'user_id' => $this->user->id
+        ]);
 
+        $task->title = '書き換え';
 
         $response = $this->patchJson("api/task/{$task->id}", $task->toArray());
 
@@ -105,7 +113,9 @@ class TaskTest extends TestCase
      */
     public function 削除することができる()
     {
-        $task = Task::factory()->count(10)->create();
+        $task = Task::factory()->count(10)->create([
+            'user_id' => $this->user->id
+        ]);
 
         $response = $this->deleteJson("api/task/22");
         $response->assertOk();
