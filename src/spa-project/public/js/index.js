@@ -2853,11 +2853,11 @@ var AuthQuery_1 = __webpack_require__(/*! ../../queries/AuthQuery */ "./resource
 var LoginPage = function LoginPage() {
   var login = (0, AuthQuery_1.useLogin)();
 
-  var _a = (0, react_1.useState)('admin@gmail.com'),
+  var _a = (0, react_1.useState)(''),
       email = _a[0],
       setEmail = _a[1];
 
-  var _b = (0, react_1.useState)('password'),
+  var _b = (0, react_1.useState)(''),
       password = _b[0],
       setPassword = _b[1];
 
@@ -2899,7 +2899,7 @@ var LoginPage = function LoginPage() {
   }, "\u30ED\u30B0\u30A4\u30F3"))), react_1["default"].createElement("div", {
     className: "links"
   }, react_1["default"].createElement("a", {
-    href: "#"
+    href: "/help"
   }, "\u30D8\u30EB\u30D7")));
 };
 
